@@ -1,0 +1,29 @@
+{
+  "rnokpp": {
+    "valid": ["1759013776", "3184710691"],
+    "invalid_checksum": ["1759013770", "3184710690"],
+    "invalid_length": ["12345", "17590137761"],
+    "invalid_format": ["175901377a"]
+  },
+  "edrpou": {
+    "valid": ["32855961"],
+    "invalid_checksum": ["32855968"],
+    "invalid_length": ["12345", "328559611"]
+  },
+  "unzr": {
+    "valid": ["19550212-01110"],
+    "invalid_checksum": ["19550212-01111"],
+    "invalid_date": ["19900230-00011"]
+  },
+  "luhn": {
+    "valid": ["4242424242424242", "4111111111111111"],
+    "invalid_checksum": ["4242424242424243"],
+    "invalid_length": ["123"]
+  },
+  "notes": {
+    "rnokpp": "1759013776 is python-stdnum's doctest vector; 3184710691 is the Wikipedia worked example.",
+    "edrpou": "32855961 is python-stdnum's doctest vector.",
+    "unzr": "19550212-01110 is the ICAO-weight worked example from the UNZR calculation annex.",
+    "luhn": "Stripe published test PANs, not live cards."
+  }
+}

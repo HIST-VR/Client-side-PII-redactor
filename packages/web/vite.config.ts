@@ -15,7 +15,7 @@ const CSP = [
   "style-src 'self'",
   "img-src 'self' data:",
   "font-src 'self'",
-  "connect-src 'self' https://huggingface.co https://*.huggingface.co https://cdn-lfs.huggingface.co https://cdn-lfs-us-1.huggingface.co https://cas-bridge.xethub.hf.co",
+  "connect-src 'self' https://huggingface.co https://*.huggingface.co https://hf.co https://*.hf.co",
   "worker-src 'self' blob:",
   "child-src 'self' blob:",
   "object-src 'none'",

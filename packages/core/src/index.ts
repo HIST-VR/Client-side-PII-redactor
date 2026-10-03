@@ -8,9 +8,10 @@ export {
   DEFAULT_NER_MODEL,
   type NerEngine,
   type NerEngineOptions,
+  type OnnxWasmPaths,
 } from "./ner/engine.ts";
 export { DEFAULT_NER_THRESHOLD, tokensToEntities } from "./ner/postprocess.ts";
-export { EntityType, Source, type Entity } from "./types.ts";
+export { CONTAINER_TYPES, EntityType, PRIORITY, Source, entity, type Entity } from "./types.ts";
 export { isValidIban, generateIban } from "./validators/iban.ts";
 export { luhnValid, generateLuhn } from "./validators/luhn.ts";
 export { isValidRnokpp, rnokppChecksumValid, generateRnokpp } from "./validators/rnokpp.ts";

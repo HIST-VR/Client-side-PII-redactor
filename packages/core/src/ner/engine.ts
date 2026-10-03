@@ -5,12 +5,18 @@ import { mergeWindowPreds, tokenWindows, type TokenPred } from "./windows.ts";
 export const DEFAULT_NER_MODEL = "onnx-community/uk-ner-ONNX";
 export const DEFAULT_NER_DTYPE = "int8" as const;
 
+/** Same-origin ORT wasm, or a CDN prefix. Set this before load in a Web Worker. */
+export type OnnxWasmPaths = string | { wasm?: string; mjs?: string };
+
 export interface NerEngineOptions {
   modelId?: string;
   dtype?: "int8" | "q8" | "q4f16" | "fp32";
   scoreThreshold?: number;
   maxLength?: number;
   stride?: number;
+  wasmPaths?: OnnxWasmPaths;
+  /** 1 inside a Worker: nested ORT thread-pool workers are unreliable. */
+  wasmNumThreads?: number;
   progress?: (msg: string) => void;
 }
 
@@ -34,12 +40,27 @@ export async function createNerEngine(options: NerEngineOptions = {}): Promise<N
   const tf = await import("@huggingface/transformers");
   tf.env.allowRemoteModels = true;
   tf.env.allowLocalModels = false;
+  const wasm = tf.env.backends.onnx?.wasm as
+    | { proxy?: boolean; wasmPaths?: OnnxWasmPaths; numThreads?: number }
+    | undefined;
+  if (wasm) {
+    wasm.proxy = false;
+    if (options.wasmPaths !== undefined) wasm.wasmPaths = options.wasmPaths;
+    if (options.wasmNumThreads !== undefined) wasm.numThreads = options.wasmNumThreads;
+  }
 
   const tokenizer = await tf.AutoTokenizer.from_pretrained(modelId);
   const model = await tf.AutoModelForTokenClassification.from_pretrained(modelId, {
     dtype,
-    progress_callback: (info: { status?: string; file?: string }) => {
-      if (info.status === "progress" && info.file) progress(`download ${info.file}`);
+    progress_callback: (info: { status?: string; file?: string; progress?: number }) => {
+      if (info.status === "progress" && info.file) {
+        const pct = typeof info.progress === "number" ? ` ${Math.round(info.progress)}%` : "";
+        progress(`download ${info.file}${pct}`);
+      } else if (info.status === "initiate" && info.file) {
+        progress(`fetch ${info.file}`);
+      } else if (info.status === "done" && info.file) {
+        progress(`cached ${info.file}`);
+      }
     },
   });
   progress("ner ready");

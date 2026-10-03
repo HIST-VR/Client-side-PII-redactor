@@ -47,6 +47,13 @@ describe("passports dob address", () => {
     expect(found[0]!.value).toContain("Хрещатик");
     expect(found[0]!.value).toContain("22");
   });
+  it("two-token street names keep the building and stop before the recipient", () => {
+    const text = "Адреса доставки: бульв. Лесі Українки, буд. 114. Отримувач Тарас Мельник.";
+    const found = findAddresses(text);
+    expect(found).toHaveLength(1);
+    expect(found[0]!.value).toBe("бульв. Лесі Українки, буд. 114");
+    expect(found[0]!.value.includes("Тарас")).toBe(false);
+  });
 });
 
 describe("cards emails", () => {

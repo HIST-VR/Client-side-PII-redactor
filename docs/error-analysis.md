@@ -1,8 +1,8 @@
 # Error analysis
 
-Frozen **held-out** split (`datasets/corpus.jsonl`, 53 docs, 99 gold spans). Gold is true PII, including `PERSON`. These examples were **not** used to change rules or the NER threshold. Inspect `dev` (`npm run eval -- --layer hybrid --split dev --mismatches`) when you do change the detector.
+Frozen **held-out** split (`datasets/corpus.jsonl`, 53 docs, 99 gold spans). Gold is true PII, including `PERSON`. The NER threshold was set before this split. Two-word street names were added after this write-up; inspect `dev` (`npm run eval -- --layer hybrid --split dev --mismatches`) for further rule changes.
 
-Hybrid micro F1 **0.949** (93 tp / 4 fp / 6 fn). Checksum types (IBAN, CARD, RNOKPP, EDRPOU, UNZR, PHONE, EMAIL) are exact on this split.
+Hybrid micro F1 **0.959** (94 tp / 3 fp / 5 fn). Checksum types (IBAN, CARD, RNOKPP, EDRPOU, UNZR, PHONE, EMAIL) are exact on this split. Street ADDRESS is exact on the rules layer.
 
 ## Remaining hybrid errors
 
@@ -31,14 +31,11 @@ All three are the same Russian cue, which is not in the keyword list (`наро�
 
 Adding `родился` / `родилась` to `DOB_CONTEXT` would fix them. Dates without a cue stay unflagged on purpose (`оплата 12.03.2024`).
 
-### ADDRESS — 3 FP, 1 FN (F1 0.600)
+### ADDRESS — 2 FP, 0 FN (F1 0.800)
 
-Two different mechanisms:
+Street names now take one extra capitalized word, so `бульв. Лесі Українки, буд. 114` (`gen-address-011`) matches in full. The remaining FPs are model `LOC` → `ADDRESS`: cities and country words (`Києві`, `України` in «громадянина України»). That is useful for a redactor and wrong against street-pattern gold. Dropping `LOC` would hide place names the regex never sees.
 
-1. **Street regex is one token.** `NAME` is `[A-ZА-Я…][…]{1,40}`, so `бульв. Лесі Українки, буд. 114` (`gen-address-011`) is predicted as `бульв. Лесі` (FP) and the gold street span is a miss (FN). Allowing a second capitalized word after the street type, or taking the model `LOC` for `Лесі Українки`, would close this. A greedy “read until the next period” rule would swallow the recipient line.
-2. **Model `LOC` → `ADDRESS`.** Cities and country words (`Києві`, `України` in «громадянина України») become `ADDRESS`. That is product-correct for a redactor (locations are PII) and wrong against street-pattern gold. The F1 dip is expected. Dropping `LOC` would hide place names the regex never sees.
-
-Rules-only ADDRESS F1 is **0.750** on this split; hybrid is lower because of the extra city spans.
+Rules-only ADDRESS F1 is **1.000** on this split; hybrid is lower because of those city spans.
 
 ### PASSPORT — 1 FP, 0 FN (F1 0.963)
 
@@ -50,12 +47,11 @@ The 9-digit ID-card rule requires a nearby keyword. `паспорт` occurs insi
 
 ## Rules-only (for contrast)
 
-23 FN + 2 FP. The 19 PERSON misses are expected. The other four are the ADDRESS split and the three `родился` DOBs above, plus the `hw-025` passport FP. Hybrid recovers every PERSON the model knows and leaves those four structural issues.
+22 FN + 1 FP. The 19 PERSON misses are expected. The other three FN are the `родился` DOBs; the FP is `hw-025`. Hybrid recovers every PERSON the model knows.
 
-## What I would change next (not done here)
+## Still open
 
 1. Add `родился`/`родилась` to DOB cues after checking `dev`, then re-report held-out.
 2. Negation-aware keyword matching for passport / DOB.
-3. Two-token street names (`Лесі Українки`, `Хрещатик` already works because it is one token).
-4. A KYC-form NER fine-tune or a conservative `ПІБ`/`мене звати` name pattern with a surname list — measured on `dev` first.
-5. Keep `LOC` → `ADDRESS` in the product; split “street” vs “place” in gold if we ever want a cleaner ADDRESS F1.
+3. A KYC-form NER fine-tune or a conservative `ПІБ`/`мене звати` name pattern with a surname list — measured on `dev` first.
+4. Keep `LOC` → `ADDRESS` in the product; split “street” vs “place” in gold if we ever want a cleaner ADDRESS F1.

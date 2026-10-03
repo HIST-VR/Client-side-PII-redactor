@@ -14,11 +14,11 @@ type Source = "hover" | "focus" | "touch";
 
 export function Hint({
   text,
-  block,
+  placement = "below",
   children,
 }: {
   text: string;
-  block?: boolean;
+  placement?: "above" | "below";
   children: ReactNode;
 }) {
   const id = useId();
@@ -50,10 +50,16 @@ export function Hint({
     const a = host.getBoundingClientRect();
     const b = bubble.getBoundingClientRect();
     const margin = 8;
-    let top = a.bottom + margin;
-    if (top + b.height > window.innerHeight - margin) {
-      top = Math.max(margin, a.top - b.height - margin);
-    }
+    const below = a.bottom + margin;
+    const above = a.top - b.height - margin;
+    let top =
+      placement === "above"
+        ? above < margin
+          ? below
+          : above
+        : below + b.height > window.innerHeight - margin
+          ? Math.max(margin, above)
+          : below;
     let left = a.left + a.width / 2 - b.width / 2;
     left = Math.min(Math.max(margin, left), window.innerWidth - b.width - margin);
     setPos({ top, left });
@@ -61,7 +67,7 @@ export function Hint({
 
   useLayoutEffect(() => {
     if (open) place();
-  }, [open, text]);
+  }, [open, text, placement]);
 
   useEffect(() => {
     if (!open) return;
@@ -85,7 +91,7 @@ export function Hint({
   return (
     <div
       ref={hostRef}
-      className={block ? "hint-host hint-host-block" : "hint-host"}
+      className={placement === "above" ? "hint-host hint-label" : "hint-host"}
       onMouseOver={() => show("hover")}
       onMouseOut={(e) => {
         if (sourceRef.current !== "hover") return;

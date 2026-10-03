@@ -31,6 +31,7 @@ export const en: Record<keyof typeof uk, string> = {
   pasted: "Pasted",
   pasteFailed: "Paste failed",
   maskMode: "Mask mode",
+  maskModeHint: "How detected spans are replaced in the masked copy.",
   maskPlaceholder: "Placeholder",
   maskPartial: "Partial",
   maskPseudonym: "Pseudonyms",

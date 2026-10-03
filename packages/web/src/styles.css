@@ -305,8 +305,9 @@ a {
   vertical-align: middle;
 }
 
-.hint-host-block {
-  display: block;
+.hint-label {
+  cursor: help;
+  border-bottom: 1px dotted color-mix(in srgb, var(--ink) 35%, transparent);
 }
 
 .hint-bubble {

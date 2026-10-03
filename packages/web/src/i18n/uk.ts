@@ -29,6 +29,7 @@ export const uk = {
   pasted: "Вставлено",
   pasteFailed: "Не вдалося вставити",
   maskMode: "Режим маски",
+  maskModeHint: "Як замінювати знайдені фрагменти в маскованому тексті.",
   maskPlaceholder: "Замінник",
   maskPartial: "Частково",
   maskPseudonym: "Псевдоніми",

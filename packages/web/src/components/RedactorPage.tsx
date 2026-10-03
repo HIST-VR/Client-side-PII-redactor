@@ -158,7 +158,11 @@ export function RedactorPage({ locale }: { locale: Locale }) {
       </div>
 
       <div className="panel" style={{ margin: "1rem 0" }}>
-        <h2>{t(locale, "maskMode")}</h2>
+        <h2>
+          <Hint text={t(locale, "maskModeHint")} placement="above">
+            <span>{t(locale, "maskMode")}</span>
+          </Hint>
+        </h2>
         <div className="row" role="group" aria-label={t(locale, "maskMode")}>
           {MASKS.map(([mode, key, hint]) => (
             <Hint key={mode} text={t(locale, hint)}>
@@ -176,9 +180,11 @@ export function RedactorPage({ locale }: { locale: Locale }) {
             </Hint>
           ))}
         </div>
-        <Hint text={t(locale, "typesHint")} block>
-          <h2 style={{ marginTop: "0.9rem" }}>{t(locale, "types")}</h2>
-        </Hint>
+        <h2 style={{ marginTop: "0.9rem" }}>
+          <Hint text={t(locale, "typesHint")} placement="above">
+            <span>{t(locale, "types")}</span>
+          </Hint>
+        </h2>
         <div className="row">
           <button
             type="button"

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { MetricsPage } from "./components/MetricsPage";
 import { RedactorPage } from "./components/RedactorPage";
@@ -63,6 +64,7 @@ export function App() {
         }}
       />
       {route === "metrics" ? <MetricsPage locale={locale} /> : <RedactorPage locale={locale} />}
+      <Footer locale={locale} />
     </div>
   );
 }

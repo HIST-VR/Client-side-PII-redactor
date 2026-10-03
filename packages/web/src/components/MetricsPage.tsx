@@ -10,7 +10,7 @@ export function MetricsPage({ locale }: { locale: Locale }) {
     <main id="main">
       <section className="panel">
         <h2>{t(locale, "metricsTitle")}</h2>
-        <p className="status">{t(locale, "metricsLead")}</p>
+        <p>{t(locale, "metricsLead")}</p>
         <div className="table-wrap">
         <table>
           <thead>
@@ -60,9 +60,7 @@ export function MetricsPage({ locale }: { locale: Locale }) {
           </tbody>
         </table>
         </div>
-        <p className="status" style={{ marginTop: "0.8rem" }}>
-          {t(locale, "metricsNote")}
-        </p>
+        <p style={{ marginTop: "0.8rem" }}>{t(locale, "metricsNote")}</p>
       </section>
       <Limitations locale={locale} />
     </main>

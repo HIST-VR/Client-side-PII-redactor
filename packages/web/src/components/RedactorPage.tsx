@@ -18,6 +18,7 @@ import { sampleText, type SampleId } from "../lib/samples";
 import { NerClient } from "../workers/client";
 import { EntityTable } from "./EntityTable";
 import { HighlightedText } from "./HighlightedText";
+import { Hint } from "./Hint";
 import { Limitations } from "./Limitations";
 
 const SAMPLES: SampleId[] = ["support", "bank", "kyc", "mixed", "negatives"];
@@ -160,25 +161,24 @@ export function RedactorPage({ locale }: { locale: Locale }) {
         <h2>{t(locale, "maskMode")}</h2>
         <div className="row" role="group" aria-label={t(locale, "maskMode")}>
           {MASKS.map(([mode, key, hint]) => (
-            <button
-              key={mode}
-              type="button"
-              className="chip tip"
-              aria-pressed={maskMode === mode}
-              title={t(locale, hint)}
-              data-tip={t(locale, hint)}
-              onClick={() => {
-                setMaskMode(mode);
-                saveMaskMode(mode);
-              }}
-            >
-              {t(locale, key)}
-            </button>
+            <Hint key={mode} text={t(locale, hint)}>
+              <button
+                type="button"
+                className="chip"
+                aria-pressed={maskMode === mode}
+                onClick={() => {
+                  setMaskMode(mode);
+                  saveMaskMode(mode);
+                }}
+              >
+                {t(locale, key)}
+              </button>
+            </Hint>
           ))}
         </div>
-        <h2 className="tip" style={{ marginTop: "0.9rem" }} title={t(locale, "typesHint")} data-tip={t(locale, "typesHint")}>
-          {t(locale, "types")}
-        </h2>
+        <Hint text={t(locale, "typesHint")} block>
+          <h2 style={{ marginTop: "0.9rem" }}>{t(locale, "types")}</h2>
+        </Hint>
         <div className="row">
           <button
             type="button"
@@ -295,36 +295,36 @@ function NerBanner({ locale, ner }: { locale: Locale; ner: NerClient }) {
         <p className="warn">
           {t(locale, "nerError")} {ner.lastError}
         </p>
-        <button
-          type="button"
-          className="btn tip"
-          title={t(locale, "nerLoadHint")}
-          data-tip={t(locale, "nerLoadHint")}
-          onClick={() => {
-            saveNerEnabled(true);
-            void ner.load().catch(() => undefined);
-          }}
-        >
-          {t(locale, "nerRetry")}
-        </button>
+        <Hint text={t(locale, "nerLoadHint")}>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              saveNerEnabled(true);
+              void ner.load().catch(() => undefined);
+            }}
+          >
+            {t(locale, "nerRetry")}
+          </button>
+        </Hint>
       </div>
     );
   }
   return (
     <div className="banner">
       <p>{t(locale, "nerIdle")}</p>
-      <button
-        type="button"
-        className="btn btn-primary tip"
-        title={t(locale, "nerLoadHint")}
-        data-tip={t(locale, "nerLoadHint")}
-        onClick={() => {
-          saveNerEnabled(true);
-          void ner.load().catch(() => undefined);
-        }}
-      >
-        {t(locale, "nerLoad")}
-      </button>
+      <Hint text={t(locale, "nerLoadHint")}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => {
+            saveNerEnabled(true);
+            void ner.load().catch(() => undefined);
+          }}
+        >
+          {t(locale, "nerLoad")}
+        </button>
+      </Hint>
     </div>
   );
 }

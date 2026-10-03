@@ -2,7 +2,7 @@ import type { uk } from "./uk";
 
 export const en: Record<keyof typeof uk, string> = {
   title: "On-device PII redactor",
-  tagline: "No text leaves your device. Some entities are determined only after the model runs."
+  tagline: "No text leaves your device. Some entities are determined only after the model runs.",
   skip: "Skip to text",
   navRedactor: "Redactor",
   navMetrics: "Metrics",
@@ -64,6 +64,9 @@ export const en: Record<keyof typeof uk, string> = {
   limitationsTitle: "Limitations",
   limitationsBody:
     "This tool is not a means of ensuring legal or regulatory compliance. Model weights are loaded directly from the Hugging Face Hub, and the input text is processed exclusively in your browser.",
+  footerBlurb: "On-device PII redactor. No backend. Text stays in this tab. © 2026",
+  footerContact: "Contact:",
+  footerGithub: "GitHub",
   metricsTitle: "Held-out metrics",
   metricsLead:
     "Synthetic held-out set, 53 documents, 99 gold spans. The NER threshold was set before this split.",

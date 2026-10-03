@@ -167,12 +167,14 @@ a {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  border: 1px solid transparent;
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
 }
 
 .nav-link[aria-current="page"] {
-  border-color: var(--line);
-  background: var(--bg-elev);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 .seg {
@@ -297,35 +299,30 @@ a {
   -webkit-overflow-scrolling: touch;
 }
 
-.tip {
-  position: relative;
+.hint-host {
+  display: inline-flex;
+  max-width: 100%;
+  vertical-align: middle;
 }
 
-.tip[data-tip]::after {
-  content: attr(data-tip);
-  position: absolute;
-  z-index: 12;
-  left: 50%;
-  top: calc(100% + 0.4rem);
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: min(16.5rem, 72vw);
-  padding: 0.4rem 0.55rem;
+.hint-host-block {
+  display: block;
+}
+
+.hint-bubble {
+  position: fixed;
+  z-index: 40;
+  max-width: min(18rem, calc(100vw - 1.5rem));
+  padding: 0.45rem 0.6rem;
   border-radius: 8px;
   background: var(--ink);
   color: var(--bg-elev);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 400;
   line-height: 1.35;
   text-align: left;
-  opacity: 0;
   pointer-events: none;
   box-shadow: var(--shadow);
-}
-
-.tip:hover::after,
-.tip:focus-visible::after {
-  opacity: 1;
 }
 
 @media (max-width: 840px) {
@@ -517,6 +514,23 @@ th {
 .limitations p {
   margin: 0;
   color: var(--muted);
+}
+
+.footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.footer p {
+  margin: 0;
 }
 
 .visually-hidden {

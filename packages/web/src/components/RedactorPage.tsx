@@ -295,6 +295,7 @@ function NerBanner({ locale, ner }: { locale: Locale; ner: NerClient }) {
         <p className="warn">
           {t(locale, "nerError")} {ner.lastError}
         </p>
+        <p className="status">{t(locale, "nerRefreshHint")}</p>
         <Hint text={t(locale, "nerLoadHint")}>
           <button
             type="button"

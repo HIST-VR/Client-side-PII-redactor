@@ -60,6 +60,7 @@ export const en: Record<keyof typeof uk, string> = {
   nerReady: "Model ready. Names and locations are merged with the rules.",
   nerError: "The model failed to load.",
   nerRetry: "Retry",
+  nerRefreshHint: "Hard-refresh the page (Ctrl+Shift+R) and hit Retry. An old tab keeps the previous security policy.",
   tooLong: "Text was trimmed to {n} characters so the tab stays responsive.",
   limitationsTitle: "Limitations",
   limitationsBody:

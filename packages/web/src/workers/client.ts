@@ -39,7 +39,9 @@ export class NerClient {
     }
     // A failed fetch leaves ORT / transformers.js unusable in that worker.
     // Retry must start a new one (a new browser profile already does).
+    const retry = this.status === "error";
     this.dropWorker();
+    if (retry) await clearTransformersCache();
     this.status = "loading";
     this.lastError = null;
     this.progressMessage = "";
@@ -154,4 +156,13 @@ export class NerClient {
 
 function defaultWorker(): Worker {
   return new Worker(new URL("./ner.worker.ts", import.meta.url), { type: "module" });
+}
+
+async function clearTransformersCache(): Promise<void> {
+  if (typeof caches === "undefined") return;
+  try {
+    await caches.delete("transformers-cache");
+  } catch {
+    /* ignore */
+  }
 }

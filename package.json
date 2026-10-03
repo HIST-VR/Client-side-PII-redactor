@@ -6,8 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "npm test -w @ua-pii/core",
-    "typecheck": "npm run typecheck -w @ua-pii/core"
+    "test": "npm test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "generate": "npm run generate -w @ua-pii/eval",
+    "eval": "npm run eval -w @ua-pii/eval --"
   },
   "engines": {
     "node": ">=20"

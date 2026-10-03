@@ -1,6 +1,18 @@
-# Decisions (phase 2)
+# Decisions
 
-## One engine: TypeScript
+## Phase 3 — eval protocol
+
+Gold is **true PII**, including `PERSON`, not “what the rules can find”. Rules-only `PERSON` recall is expected to be 0 until the in-browser NER lands.
+
+Invalid checksums (IBAN, Luhn, РНОКПП, ЄДРПОУ, УНЗР) are negatives: they appear in the text with **no** gold span.
+
+Held-out is a stable 20% split: `hash(id) % 5 === 0`. Adding documents does not reshuffle old ids. Do not tune rules against held-out; inspect `dev` for error examples.
+
+`--layer model|hybrid` is an ablation hook. Until phase 4, `model` predicts nothing and `hybrid` equals `rules`.
+
+The corpus is synthetic-only (`datasets/`). Never add live customer text.
+
+## Phase 2 — one engine: TypeScript
 
 The product processes pasted text in the browser, so the detector is TypeScript (`packages/core`). A second Python implementation of the same checksums and regexes would drift and is not on any runtime path. Eval and the dataset generator (phase 3) will call `@ua-pii/core` as well.
 

@@ -2,7 +2,7 @@ import type { uk } from "./uk";
 
 export const en: Record<keyof typeof uk, string> = {
   title: "On-device PII redactor",
-  tagline: "Text never leaves the tab. Rules are trustworthy immediately; names arrive after the model loads.",
+  tagline: "No text leaves your device. Some entities are determined only after the model runs."
   skip: "Skip to text",
   navRedactor: "Redactor",
   navMetrics: "Metrics",
@@ -63,7 +63,7 @@ export const en: Record<keyof typeof uk, string> = {
   tooLong: "Text was trimmed to {n} characters so the tab stays responsive.",
   limitationsTitle: "Limitations",
   limitationsBody:
-    "This is not a legal or regulatory compliance tool. Detection is best-effort. Model weights download from Hugging Face Hub; pasted text stays in the browser.",
+    "This tool is not a means of ensuring legal or regulatory compliance. Model weights are loaded directly from the Hugging Face Hub, and the input text is processed exclusively in your browser.",
   metricsTitle: "Held-out metrics",
   metricsLead:
     "Synthetic held-out set, 53 documents, 99 gold spans. The NER threshold was set before this split.",

@@ -1,5 +1,17 @@
 # Decisions
 
+## Phase 5 — demo UI and Web Worker
+
+The demo is `packages/web` (Vite + React). Rules run on the UI thread so paste is instant. NER runs in a module Web Worker via `createNerEngine()`. Hybrid merge stays in the page: `detectHybrid(text, modelEntities)`.
+
+The 110 MB Hub download is **opt-in**. A first visit must not pull the model without a click. Consent is stored in `localStorage`; later visits auto-load. If the worker fails, the UI stays on rules.
+
+ORT wasm is served from this origin (`/wasm/…`) so CSP does not need jsDelivr. `connect-src` allows Hugging Face only for weights. User text is never posted. COOP `same-origin` + COEP `credentialless` give the worker a chance at `SharedArrayBuffer` without requiring CORP on the Hub.
+
+Routing is hash-based (`#/`, `#/metrics`) so a static host does not need rewrite rules. i18n is two typed dictionaries (UK default). Theme is CSS variables with a system/light/dark toggle.
+
+Masking and type filters are view-only: they do not re-run detection.
+
 ## Phase 4 — in-browser NER
 
 Model: [`onnx-community/uk-ner-ONNX`](https://huggingface.co/onnx-community/uk-ner-ONNX) (XLM-RoBERTa-Uk on Ukr-Synth). Default dtype **int8** (~110 MB); `q4f16` is the smaller WebGPU fallback for phase 5.

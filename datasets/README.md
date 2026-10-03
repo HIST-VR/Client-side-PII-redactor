@@ -9,6 +9,8 @@
 | `metrics-model-heldout.json` | NER-only scores. |
 | `metrics-hybrid-heldout.json` | Rules + NER after merge. |
 
+The demo copies these three JSON files into `packages/web/src/data/` so the metrics page has no extra network.
+
 ## Gold
 
 - Character spans are JavaScript UTF-16 indices (BMP Ukrainian text).

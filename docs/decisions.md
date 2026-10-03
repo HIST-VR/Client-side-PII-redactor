@@ -1,12 +1,10 @@
 # Decisions (phase 2)
 
-## Python reference + TypeScript port
+## One engine: TypeScript
 
-The detector that runs on pasted text **must** be TypeScript: there is no backend, and Pyodide would add a huge WASM runtime, wreck CSP, and freeze on first load.
+The product processes pasted text in the browser, so the detector is TypeScript (`packages/core`). A second Python implementation of the same checksums and regexes would drift and is not on any runtime path. Eval and the dataset generator (phase 3) will call `@ua-pii/core` as well.
 
-Python is still the place algorithms are authored and unit-tested (`python/ua_pii`). Evaluation in phase 3 will call this package. `packages/core` is a browser port checked against the same JSON fixtures.
-
-If a checksum ever disagrees between the two, the Python test vector is the source of truth and the TS port is wrong.
+Checksum formulas were checked against NBU, ISO, Wikipedia, python-stdnum, and ICAO Doc 9303 (`docs/sources.md`). Those libraries are citations, not dependencies.
 
 ## УНЗР
 

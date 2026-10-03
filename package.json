@@ -1,16 +1,13 @@
 {
   "name": "ua-pii-redactor",
   "private": true,
-  "description": "Client-side PII redactor for Ukrainian text. Python is the reference engine; TypeScript is the browser port.",
+  "description": "Client-side PII redactor for Ukrainian text. Detection runs in TypeScript (@ua-pii/core).",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "test": "npm run test:py && npm run test:ts",
-    "test:py": "python -m pytest python/tests -q",
-    "test:ts": "npm test -w @ua-pii/core",
-    "typecheck": "npm run typecheck -w @ua-pii/core",
-    "lint:py": "python -m ruff check python"
+    "test": "npm test -w @ua-pii/core",
+    "typecheck": "npm run typecheck -w @ua-pii/core"
   },
   "engines": {
     "node": ">=20"

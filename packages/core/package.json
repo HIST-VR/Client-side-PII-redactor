@@ -1,7 +1,7 @@
 {
   "name": "@ua-pii/core",
   "version": "0.1.0",
-  "description": "Browser port of the ua_pii rule engine.",
+  "description": "Rule engine for Ukrainian PII detection and masking.",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

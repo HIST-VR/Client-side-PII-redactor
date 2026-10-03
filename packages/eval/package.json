@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ua-pii/core": "*"
+    "@ua-pii/core": "*",
+    "onnxruntime-node": "^1.21.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

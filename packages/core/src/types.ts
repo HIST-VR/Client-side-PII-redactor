@@ -52,11 +52,12 @@ export function entity(
   end: number,
   value: string,
   subtype?: string,
+  source: Source = Source.RULE,
 ): Entity {
   if (start < 0 || end < start) {
     throw new Error(`invalid span [${start}, ${end})`);
   }
-  const e: Entity = { type, start, end, value, source: Source.RULE };
+  const e: Entity = { type, start, end, value, source };
   if (subtype !== undefined) e.subtype = subtype;
   return e;
 }

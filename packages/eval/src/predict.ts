@@ -1,11 +1,21 @@
-import { detect, type Entity } from "@ua-pii/core";
+import { createNerEngine, detect, detectHybrid, type Entity, type NerEngine } from "@ua-pii/core";
 import type { Layer } from "./types.ts";
 
-/**
- * Ablation hook. `model` is empty until phase 4.
- * `hybrid` equals `rules` until the NER merge lands.
- */
-export function predict(text: string, layer: Layer): Entity[] {
-  if (layer === "model") return [];
+export type PredictFn = (text: string) => Entity[] | Promise<Entity[]>;
+
+export function predictRules(text: string): Entity[] {
   return detect(text);
+}
+
+export function makePredictor(layer: Layer, engine?: NerEngine): PredictFn {
+  if (layer === "rules") return predictRules;
+  if (!engine) {
+    throw new Error(`layer ${layer} needs a NER engine`);
+  }
+  if (layer === "model") return (text) => engine.detect(text);
+  return async (text) => detectHybrid(text, await engine.detect(text));
+}
+
+export async function loadEngine(progress?: (msg: string) => void): Promise<NerEngine> {
+  return createNerEngine({ progress });
 }

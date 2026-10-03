@@ -1,15 +1,21 @@
+import type { Entity } from "@ua-pii/core";
 import { ALL_TYPES, addCounts, countDoc, emptyCounts, mismatches, scoreOf, type Mismatch } from "./metrics.ts";
-import { predict } from "./predict.ts";
+import { predictRules, type PredictFn } from "./predict.ts";
 import type { GoldDoc, Layer, Report, Score, Split } from "./types.ts";
 
-export function evaluate(docs: GoldDoc[], layer: Layer, split: Split | "all" = "all"): Report {
+export async function evaluate(
+  docs: GoldDoc[],
+  layer: Layer,
+  split: Split | "all" = "all",
+  predictFn: PredictFn = predictRules,
+): Promise<Report> {
   let micro = emptyCounts();
   const per = Object.fromEntries(ALL_TYPES.map((t) => [t, emptyCounts()]));
   const support: Record<string, number> = Object.fromEntries(ALL_TYPES.map((t) => [t, 0]));
   let goldTotal = 0;
 
   for (const d of docs) {
-    const pred = predict(d.text, layer);
+    const pred = await predictFn(d.text);
     micro = addCounts(micro, countDoc(d.entities, pred));
     goldTotal += d.entities.length;
     for (const t of ALL_TYPES) {
@@ -34,10 +40,11 @@ export function evaluate(docs: GoldDoc[], layer: Layer, split: Split | "all" = "
   };
 }
 
-export function collectMismatches(docs: GoldDoc[], layer: Layer): Mismatch[] {
+export async function collectMismatches(docs: GoldDoc[], predictFn: PredictFn): Promise<Mismatch[]> {
   const out: Mismatch[] = [];
   for (const d of docs) {
-    out.push(...mismatches(d.id, d.text, d.entities, predict(d.text, layer)));
+    const pred: Entity[] = await predictFn(d.text);
+    out.push(...mismatches(d.id, d.text, d.entities, pred));
   }
   return out;
 }

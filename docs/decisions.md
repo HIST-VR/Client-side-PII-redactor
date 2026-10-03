@@ -1,14 +1,26 @@
 # Decisions
 
+## Phase 4 — in-browser NER
+
+Model: [`onnx-community/uk-ner-ONNX`](https://huggingface.co/onnx-community/uk-ner-ONNX) (XLM-RoBERTa-Uk on Ukr-Synth). Default dtype **int8** (~110 MB); `q4f16` is the smaller WebGPU fallback for phase 5.
+
+Tags: `PER` → `PERSON`, `LOC` → `ADDRESS`, `ORG` dropped. Score threshold **0.5**, chosen before looking at held-out.
+
+transformers.js token-classification does not emit character offsets, so we tokenize ourselves, argmax logits, align pieces onto the original string, fuse BIO, then snap subword spans to letter boundaries. Sequences longer than 512 tokens use a sliding window (stride 128) and keep the higher-scoring label on overlap.
+
+Inference is local. The only network use is downloading weights from Hugging Face Hub. User text never leaves the process. `createNerEngine()` is DOM-free so phase 5 can run it in a Web Worker.
+
+Hybrid is `merge(rules ∪ model)` with the existing container rule: `PERSON`/`ADDRESS` may wrap a structured identifier.
+
 ## Phase 3 — eval protocol
 
-Gold is **true PII**, including `PERSON`, not “what the rules can find”. Rules-only `PERSON` recall is expected to be 0 until the in-browser NER lands.
+Gold is **true PII**, including `PERSON`. Rules-only `PERSON` recall is 0; the NER layer is what finds names.
 
 Invalid checksums (IBAN, Luhn, РНОКПП, ЄДРПОУ, УНЗР) are negatives: they appear in the text with **no** gold span.
 
 Held-out is a stable 20% split: `hash(id) % 5 === 0`. Adding documents does not reshuffle old ids. Do not tune rules against held-out; inspect `dev` for error examples.
 
-`--layer model|hybrid` is an ablation hook. Until phase 4, `model` predicts nothing and `hybrid` equals `rules`.
+`--layer rules|model|hybrid` is the ablation CLI. Held-out is for reporting; inspect `dev` when changing the detector.
 
 The corpus is synthetic-only (`datasets/`). Never add live customer text.
 

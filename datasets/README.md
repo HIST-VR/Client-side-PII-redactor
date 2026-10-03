@@ -6,13 +6,15 @@
 | --- | --- |
 | `corpus.jsonl` | Frozen gold. One JSON object per line. Rebuild with `npm run generate`. |
 | `metrics-rules-heldout.json` | Rules-only scores on the held-out split. |
+| `metrics-model-heldout.json` | NER-only scores. |
+| `metrics-hybrid-heldout.json` | Rules + NER after merge. |
 
 ## Gold
 
 - Character spans are JavaScript UTF-16 indices (BMP Ukrainian text).
 - Nested entities (for example an IBAN inside later `ADDRESS`/`PERSON` containers) are scored independently.
 - Invalid checksums are negatives.
-- `PERSON` is annotated even though the rule engine does not detect names.
+- `PERSON` is annotated as true PII. The rule layer misses names; the NER layer is what finds them.
 
 ## Splits
 

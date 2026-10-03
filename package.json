@@ -13,5 +13,11 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "allowScripts": {
+    "onnxruntime-node@1.21.0": true,
+    "onnxruntime-node@1.30.0": true,
+    "protobufjs@7.6.6": true,
+    "sharp@0.34.5": true
   }
 }

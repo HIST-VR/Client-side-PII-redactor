@@ -48,7 +48,7 @@ describe("scoreOf", () => {
 });
 
 describe("evaluate model layer", () => {
-  it("predicts nothing", () => {
+  it("predicts nothing", async () => {
     const docs: GoldDoc[] = [
       {
         id: "t-1",
@@ -58,7 +58,7 @@ describe("evaluate model layer", () => {
         entities: [{ type: EntityType.PHONE, start: 5, end: 15 }],
       },
     ];
-    const report = evaluate(docs, "model", "dev");
+    const report = await evaluate(docs, "model", "dev", async () => []);
     expect(report.micro).toMatchObject({ tp: 0, fp: 0, fn: 1, recall: 0, precision: 0 });
   });
 });

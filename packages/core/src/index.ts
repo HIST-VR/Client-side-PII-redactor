@@ -1,6 +1,15 @@
 export { detect } from "./detect.ts";
+export { detectHybrid } from "./hybrid.ts";
 export { mask, MaskMode } from "./mask.ts";
 export { merge } from "./merge.ts";
+export {
+  createNerEngine,
+  DEFAULT_NER_DTYPE,
+  DEFAULT_NER_MODEL,
+  type NerEngine,
+  type NerEngineOptions,
+} from "./ner/engine.ts";
+export { DEFAULT_NER_THRESHOLD, tokensToEntities } from "./ner/postprocess.ts";
 export { EntityType, Source, type Entity } from "./types.ts";
 export { isValidIban, generateIban } from "./validators/iban.ts";
 export { luhnValid, generateLuhn } from "./validators/luhn.ts";

@@ -54,6 +54,12 @@ Checksums and identifier formats are taken from the documents below, not from me
 - Ukraine E.164: country code `380` + 9-digit national number. National format: `0` + 9 digits.
 - We do not call any numbering-plan API; length and prefix (`+380` / `0`) are the rule.
 
+## NER model
+
+- [`ukr-models/uk-ner`](https://huggingface.co/ukr-models/uk-ner): XLM-RoBERTa-Uk fine-tuned on [`ukr-models/Ukr-Synth`](https://huggingface.co/datasets/ukr-models/Ukr-Synth) with `B/I-PER`, `B/I-LOC`, `B/I-ORG`.
+- Browser/Node weights: [`onnx-community/uk-ner-ONNX`](https://huggingface.co/onnx-community/uk-ner-ONNX) (`model_int8.onnx` ≈ 110 MB).
+- Runtime: [Transformers.js](https://huggingface.co/docs/transformers.js) `AutoModelForTokenClassification` + ONNX Runtime.
+
 ## Dates of birth
 
 - No checksum. Detected only with a nearby cue (`народився`, `дата народження`, `DOB`, …) so random dates in statements are not flagged.

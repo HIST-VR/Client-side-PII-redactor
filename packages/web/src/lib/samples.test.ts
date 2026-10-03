@@ -28,9 +28,7 @@ describe("synthetic samples", () => {
   });
 
   it("negatives skip invalid card and uncontextual id", () => {
-    const types = new Set(detect(sampleText("negatives")).map((e) => e.type));
-    expect(types.has(EntityType.CARD)).toBe(false);
-    expect(types.has(EntityType.IBAN)).toBe(false);
+    expect(detect(sampleText("negatives"))).toEqual([]);
   });
 
   it("type filter drops disabled entities", () => {

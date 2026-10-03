@@ -3,25 +3,12 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
+import { CSP } from "./src/lib/csp";
 
 const isolationHeaders = {
   "Cross-Origin-Opener-Policy": "same-origin",
   "Cross-Origin-Embedder-Policy": "credentialless",
 };
-
-const CSP = [
-  "default-src 'self'",
-  "script-src 'self' 'wasm-unsafe-eval'",
-  "style-src 'self'",
-  "img-src 'self' data:",
-  "font-src 'self'",
-  "connect-src 'self' https://huggingface.co https://*.huggingface.co https://hf.co https://*.hf.co",
-  "worker-src 'self' blob:",
-  "child-src 'self' blob:",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-].join("; ");
 
 const require = createRequire(import.meta.url);
 const ortDist = path.dirname(require.resolve("@huggingface/transformers"));

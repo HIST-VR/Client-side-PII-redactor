@@ -4,7 +4,7 @@
 
 CI (`/.github/workflows/ci.yml`) runs typecheck, unit tests, **rules-only** held-out eval, and a freeze check against `datasets/metrics-rules-heldout.json`. Model/hybrid eval is not in CI: it downloads ~110 MB and is not needed to catch checksum regressions.
 
-The live demo is **Cloudflare Pages** at [ua-pii-redactor.pages.dev](https://ua-pii-redactor.pages.dev/). Cloudflare builds from `main` (`npm ci && npm run build`, output `packages/web/dist`). CI on GitHub only typechecks, tests, and freezes the rules baseline. Vite `base` is `./` and the worker resolves wasm as `../wasm/` relative to the worker URL. `public/_headers` sets CSP, COOP, and COEP on Cloudflare. Hub weights currently redirect to `*.hf.co` (for example `us.aws.cdn.hf.co`); `connect-src` allows `huggingface.co` and `hf.co` plus subdomains so the NER download is not blocked.
+The live demo is **Cloudflare Pages** at [ua-pii-redactor.pages.dev](https://ua-pii-redactor.pages.dev/). Cloudflare builds from `main` (`npm ci && npm run build`, output `packages/web/dist`). CI on GitHub only typechecks, tests, and freezes the rules baseline. Vite `base` is `./` and the worker resolves wasm as `../wasm/` relative to the worker URL. `public/_headers` sets CSP, COOP, and COEP on Cloudflare. Hub weights redirect through Xet to nested hosts such as `us.aws.cdn.hf.co`; CSP `*.hf.co` is one label only, so `connect-src` also lists `*.aws.cdn.hf.co`, `*.xethub.hf.co`, and the explicit Hub firewall hosts.
 
 Street `ADDRESS` spans allow a second capitalized token so `Лесі Українки` is kept with the building number. A third token is not taken, because the next line is often the recipient.
 

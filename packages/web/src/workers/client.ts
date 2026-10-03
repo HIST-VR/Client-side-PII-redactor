@@ -21,6 +21,8 @@ export class NerClient {
   private readonly listeners = new Set<() => void>();
   private readyWaiters: Array<{ resolve: () => void; reject: (err: Error) => void }> = [];
 
+  constructor(private readonly spawnWorker: () => Worker = defaultWorker) {}
+
   subscribe(fn: () => void): () => void {
     this.listeners.add(fn);
     return () => {
@@ -30,6 +32,14 @@ export class NerClient {
 
   async load(): Promise<void> {
     if (this.status === "ready") return;
+    if (this.status === "loading") {
+      return new Promise<void>((resolve, reject) => {
+        this.readyWaiters.push({ resolve, reject });
+      });
+    }
+    // A failed fetch leaves ORT / transformers.js unusable in that worker.
+    // Retry must start a new one (a new browser profile already does).
+    this.dropWorker();
     this.status = "loading";
     this.lastError = null;
     this.progressMessage = "";
@@ -56,19 +66,23 @@ export class NerClient {
   }
 
   dispose(): void {
-    for (const p of this.pending.values()) p.reject(new Error("NER client disposed"));
-    this.pending.clear();
+    this.dropWorker();
     for (const w of this.readyWaiters) w.reject(new Error("NER client disposed"));
     this.readyWaiters = [];
-    this.worker?.terminate();
-    this.worker = null;
     this.status = "idle";
     this.emit();
   }
 
+  private dropWorker(): void {
+    for (const p of this.pending.values()) p.reject(new Error("NER worker reset"));
+    this.pending.clear();
+    this.worker?.terminate();
+    this.worker = null;
+  }
+
   private ensureWorker(): Worker {
     if (this.worker) return this.worker;
-    const worker = new Worker(new URL("./ner.worker.ts", import.meta.url), { type: "module" });
+    const worker = this.spawnWorker();
     worker.addEventListener("message", (event: MessageEvent<WorkerToMain>) => {
       this.onMessage(event.data);
     });
@@ -106,6 +120,7 @@ export class NerClient {
   }
 
   private fail(message: string, requestId?: number): void {
+    const restart = this.status !== "error";
     this.status = "error";
     this.lastError = message;
     if (requestId !== undefined) {
@@ -118,6 +133,7 @@ export class NerClient {
     const waiters = this.readyWaiters;
     this.readyWaiters = [];
     for (const w of waiters) w.reject(new Error(message));
+    if (restart) this.dropWorker();
     this.emit();
   }
 
@@ -134,4 +150,8 @@ export class NerClient {
   private emit(): void {
     for (const fn of this.listeners) fn();
   }
+}
+
+function defaultWorker(): Worker {
+  return new Worker(new URL("./ner.worker.ts", import.meta.url), { type: "module" });
 }

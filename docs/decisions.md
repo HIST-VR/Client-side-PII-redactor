@@ -4,7 +4,7 @@
 
 CI (`/.github/workflows/ci.yml`) runs typecheck, unit tests, **rules-only** held-out eval, and a freeze check against `datasets/metrics-rules-heldout.json`. Model/hybrid eval is not in CI: it downloads ~110 MB and is not needed to catch checksum regressions.
 
-Preferred public host is **Cloudflare Pages** (`ua-pii-redactor.pages.dev`) from `packages/web/dist`. GitHub Pages stays as a fallback until Cloudflare secrets are set. Vite `base` is `./` and the worker resolves wasm as `../wasm/` relative to the worker URL, so the same build works at a project-pages subdirectory and at a Cloudflare root. `public/_headers` sets CSP, COOP, and COEP for Cloudflare; GitHub Pages ignores that file and keeps the HTML meta CSP.
+The live demo is **Cloudflare Pages** at [ua-pii-redactor.pages.dev](https://ua-pii-redactor.pages.dev/). Cloudflare builds from `main` (`npm ci && npm run build`, output `packages/web/dist`). CI on GitHub only typechecks, tests, and freezes the rules baseline. Vite `base` is `./` and the worker resolves wasm as `../wasm/` relative to the worker URL. `public/_headers` sets CSP, COOP, and COEP on Cloudflare.
 
 Street `ADDRESS` spans allow a second capitalized token so `Лесі Українки` is kept with the building number. A third token is not taken, because the next line is often the recipient.
 

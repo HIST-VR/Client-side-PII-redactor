@@ -4,9 +4,9 @@
 
 Paste Ukrainian (or mixed UA/RU/EN) text. The page finds personal data and masks it **in the browser**. There is no backend. Nothing you paste is uploaded.
 
-**Demo:** [hist-vr.github.io/Client-side-PII-redactor](https://hist-vr.github.io/Client-side-PII-redactor/)
+**Demo:** [ua-pii-redactor.pages.dev](https://ua-pii-redactor.pages.dev/)
 
-> **Українською.** Браузерний редактор персональних даних: IBAN, картки, РНОКПП, ЄДРПОУ, УНЗР, телефони, паспорти, пошта, імена та адреси. Правила спрацьовують одразу. Українська NER-модель [`onnx-community/uk-ner-ONNX`](https://huggingface.co/onnx-community/uk-ner-ONNX) (~110 МБ з Hugging Face) підвантажується за бажанням і працює у Web Worker. Текст не покидає вкладку. Це не сертифікований засіб відповідності.
+> **Українською.** Браузерний редактор персональних даних: IBAN, картки, РНОКПП, ЄДРПОУ, УНЗР, телефони, паспорти, пошта, імена та адреси. Правила спрацьовують одразу. Українська NER-модель [`onnx-community/uk-ner-ONNX`](https://huggingface.co/onnx-community/uk-ner-ONNX) (~110 МБ з Hugging Face) підвантажується за бажанням і працює у Web Worker. Текст не покидає вкладку.
 
 ## What it finds
 
@@ -39,7 +39,7 @@ Held-out synthetic set: 53 documents, 99 gold spans. The NER score threshold was
 | model | 0.850 | 0.172 | 0.286 | 17 | 3 | 82 |
 | **hybrid** | **0.969** | **0.949** | **0.959** | 94 | 3 | 5 |
 
-Hybrid PERSON F1 is 0.944 (17 of 19 names). IBAN, cards, tax IDs, УНЗР, phones, email, and street addresses match on this split. What still slips: two KYC-form names, three Russian *родился* dates, a hit on `не паспорт`, and city words the model tags as locations (`Києві`, `України`).
+Hybrid PERSON F1 is 0.944 (17 of 19 names). IBAN, cards, tax IDs, УНЗР, phones, email, and street addresses match on this split. 
 
 Full tables: [`docs/baseline.md`](docs/baseline.md). Misses: [`docs/error-analysis.md`](docs/error-analysis.md). In the demo: `#/metrics`.
 

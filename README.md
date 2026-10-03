@@ -1,10 +1,10 @@
 # Client-side PII redactor for Ukrainian text
 
-[![CI](https://github.com/HIST-VR/Client-side-PII-redactor/actions/workflows/ci.yml/badge.svg)](https://github.com/HIST-VR/Client-side-PII-redactor/actions/workflows/ci.yml)
+[![CI](https://github.com/VladDrakula01/Client-side-PII-redactor/actions/workflows/ci.yml/badge.svg)](https://github.com/VladDrakula01/Client-side-PII-redactor/actions/workflows/ci.yml)
 
 Detects and masks personal data in Ukrainian (and mixed UA/RU/EN) text **entirely in the browser**. No backend. Pasted text is never sent over the network.
 
-**Live demo:** [hist-vr.github.io/Client-side-PII-redactor](https://hist-vr.github.io/Client-side-PII-redactor/)
+**Live demo:** [vladdrakula01.github.io/Client-side-PII-redactor](https://vladdrakula01.github.io/Client-side-PII-redactor/)
 
 > **Українською.** Браузерний редактор персональних даних: IBAN, картки, РНОКПП, ЄДРПОУ, УНЗР, телефони, паспорти, пошта, імена та адреси. Правила спрацьовують одразу; українська NER-модель (~110 МБ з Hugging Face Hub) підвантажується за згодою і крутиться у Web Worker. Текст не покидає вкладку. Це зниження ризику, не сертифікований засіб відповідності.
 

@@ -12,3 +12,6 @@ playwright-report/
 test-results/
 blob-report/
 .playwright/
+
+# Operator notes for GitHub Pages / Cloudflare. Keep them on the machine, not the repo.
+docs/deploy.local.md

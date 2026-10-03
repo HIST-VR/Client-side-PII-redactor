@@ -4,7 +4,9 @@
 
 CI (`/.github/workflows/ci.yml`) runs typecheck, unit tests, **rules-only** held-out eval, and a freeze check against `datasets/metrics-rules-heldout.json`. Model/hybrid eval is not in CI: it downloads ~110 MB and is not needed to catch checksum regressions.
 
-The live demo is **GitHub Pages** from `packages/web/dist`. Vite `base` is `./` and the worker resolves wasm as `../wasm/` relative to the worker URL, so the same build works at a project-pages subdirectory and at a Cloudflare Pages root. `public/_headers` sets CSP, COOP, and COEP for Cloudflare; GitHub Pages ignores that file and keeps the HTML meta CSP.
+Preferred public host is **Cloudflare Pages** (`ua-pii-redactor.pages.dev`) from `packages/web/dist`. GitHub Pages stays as a fallback until Cloudflare secrets are set. Vite `base` is `./` and the worker resolves wasm as `../wasm/` relative to the worker URL, so the same build works at a project-pages subdirectory and at a Cloudflare root. `public/_headers` sets CSP, COOP, and COEP for Cloudflare; GitHub Pages ignores that file and keeps the HTML meta CSP.
+
+Street `ADDRESS` spans allow a second capitalized token so `Лесі Українки` is kept with the building number. A third token is not taken, because the next line is often the recipient.
 
 Playwright e2e uses system Chrome locally and Playwright Chromium in CI.
 

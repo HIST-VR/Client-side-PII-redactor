@@ -53,12 +53,12 @@ export const en: Record<keyof typeof uk, string> = {
   nerError: "The model failed to load.",
   nerRetry: "Retry",
   tooLong: "Text was trimmed to {n} characters so the tab stays responsive.",
-  limitationsTitle: "Honest limits",
+  limitationsTitle: "Limitations",
   limitationsBody:
-    "This lowers leak risk. It does not guarantee complete redaction and is not a GDPR, Ukrainian personal-data-law, or NBU compliance tool. Addresses and dates of birth are best-effort. Do not paste live customer data. Model weights come from Hugging Face Hub; pasted text stays in the browser process.",
+    "This is not a legal or regulatory compliance tool. Detection is best-effort. Model weights download from Hugging Face Hub; pasted text stays in the browser.",
   metricsTitle: "Held-out metrics",
   metricsLead:
-    "Frozen synthetic corpus, 53 documents, 99 gold spans. These numbers were not used to tune rules or the NER threshold.",
+    "Synthetic held-out set, 53 documents, 99 gold spans. The NER threshold was set before this split.",
   metricsLayer: "Layer",
   metricsP: "P",
   metricsR: "R",

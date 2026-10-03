@@ -1,0 +1,3 @@
+name = "ua-pii-redactor"
+compatibility_date = "2026-10-03"
+pages_build_output_dir = "packages/web/dist"

@@ -12,7 +12,8 @@
     "build": "npm run build -w @ua-pii/web",
     "preview": "npm run preview -w @ua-pii/web",
     "generate": "npm run generate -w @ua-pii/eval",
-    "eval": "npm run eval -w @ua-pii/eval --"
+    "eval": "npm run eval -w @ua-pii/eval --",
+    "check-baseline": "npm run check-baseline -w @ua-pii/eval"
   },
   "engines": {
     "node": ">=20"

@@ -9,7 +9,9 @@ function post(msg: WorkerToMain): void {
 }
 
 function wasmPaths(): string {
-  return new URL(`${import.meta.env.BASE_URL}wasm/`, self.location.origin).href;
+  // Worker lives in /assets/; wasm is emitted at /wasm/. Relative to the
+  // worker file so GitHub project Pages and Cloudflare root both resolve.
+  return new URL(/* @vite-ignore */ "../wasm/", import.meta.url).href;
 }
 
 async function loadEngine(): Promise<NerEngine> {

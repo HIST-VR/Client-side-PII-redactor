@@ -74,6 +74,7 @@ function cspPlugin(): Plugin {
 }
 
 export default defineConfig({
+  base: "./",
   plugins: [react(), ortWasmPlugin(), cspPlugin()],
   worker: { format: "es" },
   optimizeDeps: {

@@ -9,6 +9,7 @@
   "scripts": {
     "generate": "tsx src/generate.ts",
     "eval": "tsx src/cli.ts",
+    "check-baseline": "tsx src/assert-baseline.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

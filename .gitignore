@@ -8,3 +8,7 @@ Thumbs.db
 .vscode/
 coverage/
 .cache/
+playwright-report/
+test-results/
+blob-report/
+.playwright/

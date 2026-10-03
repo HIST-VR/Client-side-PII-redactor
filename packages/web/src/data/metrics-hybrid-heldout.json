@@ -1,0 +1,115 @@
+{
+  "layer": "hybrid",
+  "split": "heldout",
+  "n_docs": 53,
+  "micro": {
+    "tp": 93,
+    "fp": 4,
+    "fn": 6,
+    "precision": 0.9587628865979382,
+    "recall": 0.9393939393939394,
+    "f1": 0.9489795918367346,
+    "support": 99
+  },
+  "per_type": {
+    "PERSON": {
+      "tp": 17,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.8947368421052632,
+      "f1": 0.9444444444444444,
+      "support": 19
+    },
+    "PHONE": {
+      "tp": 11,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 11
+    },
+    "IBAN": {
+      "tp": 13,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 13
+    },
+    "CARD": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 7
+    },
+    "RNOKPP": {
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 5
+    },
+    "EDRPOU": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 7
+    },
+    "PASSPORT": {
+      "tp": 13,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.9285714285714286,
+      "recall": 1,
+      "f1": 0.962962962962963,
+      "support": 13
+    },
+    "UNZR": {
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 6
+    },
+    "EMAIL": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 4
+    },
+    "ADDRESS": {
+      "tp": 3,
+      "fp": 3,
+      "fn": 1,
+      "precision": 0.5,
+      "recall": 0.75,
+      "f1": 0.6,
+      "support": 4
+    },
+    "DOB": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.7,
+      "f1": 0.8235294117647058,
+      "support": 10
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "layer": "rules",
+  "split": "heldout",
+  "n_docs": 53,
+  "micro": {
+    "tp": 76,
+    "fp": 2,
+    "fn": 23,
+    "precision": 0.9743589743589743,
+    "recall": 0.7676767676767676,
+    "f1": 0.8587570621468926,
+    "support": 99
+  },
+  "per_type": {
+    "PERSON": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 19,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "support": 19
+    },
+    "PHONE": {
+      "tp": 11,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 11
+    },
+    "IBAN": {
+      "tp": 13,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 13
+    },
+    "CARD": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 7
+    },
+    "RNOKPP": {
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 5
+    },
+    "EDRPOU": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 7
+    },
+    "PASSPORT": {
+      "tp": 13,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.9285714285714286,
+      "recall": 1,
+      "f1": 0.962962962962963,
+      "support": 13
+    },
+    "UNZR": {
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 6
+    },
+    "EMAIL": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "support": 4
+    },
+    "ADDRESS": {
+      "tp": 3,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1": 0.75,
+      "support": 4
+    },
+    "DOB": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.7,
+      "f1": 0.8235294117647058,
+      "support": 10
+    }
+  }
+}

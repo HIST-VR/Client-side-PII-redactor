@@ -11,6 +11,7 @@ export function MetricsPage({ locale }: { locale: Locale }) {
       <section className="panel">
         <h2>{t(locale, "metricsTitle")}</h2>
         <p className="status">{t(locale, "metricsLead")}</p>
+        <div className="table-wrap">
         <table>
           <thead>
             <tr>
@@ -27,9 +28,11 @@ export function MetricsPage({ locale }: { locale: Locale }) {
             <LayerRow locale={locale} report={METRICS.hybrid} labelKey="metricsHybrid" />
           </tbody>
         </table>
+        </div>
       </section>
       <section className="panel" style={{ marginTop: "1rem" }}>
         <h2>{t(locale, "metricsPerType")}</h2>
+        <div className="table-wrap">
         <table>
           <thead>
             <tr>
@@ -56,6 +59,7 @@ export function MetricsPage({ locale }: { locale: Locale }) {
             })}
           </tbody>
         </table>
+        </div>
         <p className="status" style={{ marginTop: "0.8rem" }}>
           {t(locale, "metricsNote")}
         </p>

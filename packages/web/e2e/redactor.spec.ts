@@ -13,14 +13,14 @@ test("rules-first sample, mask, copy, metrics", async ({ page, context }) => {
   await page.getByRole("button", { name: "Частково" }).click();
   await expect(page.getByTestId("masked")).toContainText("2233");
 
-  await page.getByRole("button", { name: "Копіювати" }).click();
-  await expect(page.getByRole("button", { name: "Скопійовано" })).toBeVisible();
+  await page.getByTestId("copy-masked").click();
+  await expect(page.getByTestId("copy-masked")).toHaveText("Скопійовано");
 
   await page.getByRole("link", { name: "Метрики" }).click();
   await expect(page.getByTestId("f1-hybrid")).toHaveText("0.959");
   await expect(page.getByTestId("f1-rules")).toHaveText("0.870");
 
-  await page.getByLabel("Мова").selectOption("en");
+  await page.getByRole("button", { name: "EN", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("On-device PII redactor");
   await expect(page.getByRole("link", { name: "Metrics" })).toBeVisible();
 });
@@ -36,7 +36,7 @@ test("mobile layout still redacts a sample", async ({ page }) => {
 
 test("limitations stay visible and English sample path works", async ({ page }) => {
   await page.goto("/#/");
-  await page.getByLabel("Мова").selectOption("en");
+  await page.getByRole("button", { name: "EN", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Limitations" })).toBeVisible();
   await page.getByRole("button", { name: "Support chat" }).click();
   await expect(page.getByTestId("masked")).toContainText("[PHONE]");

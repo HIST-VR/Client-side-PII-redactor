@@ -1,3 +1,11 @@
+export async function pasteText(): Promise<string | null> {
+  try {
+    return await navigator.clipboard.readText();
+  } catch {
+    return null;
+  }
+}
+
 export async function copyText(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);

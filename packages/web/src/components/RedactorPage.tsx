@@ -1,8 +1,8 @@
 import { detect, detectHybrid, mask, MaskMode, type Entity, type EntityType } from "@ua-pii/core";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Locale } from "../i18n";
+import type { Locale, MessageKey } from "../i18n";
 import { t, typeLabel } from "../i18n";
-import { copyText } from "../lib/clipboard";
+import { copyText, pasteText } from "../lib/clipboard";
 import {
   ALL_TYPES,
   filterEntities,
@@ -22,6 +22,11 @@ import { Limitations } from "./Limitations";
 
 const SAMPLES: SampleId[] = ["support", "bank", "kyc", "mixed", "negatives"];
 const NER_DEBOUNCE_MS = 250;
+const MASKS: Array<[MaskMode, MessageKey, MessageKey]> = [
+  [MaskMode.PLACEHOLDER, "maskPlaceholder", "maskPlaceholderHint"],
+  [MaskMode.PARTIAL, "maskPartial", "maskPartialHint"],
+  [MaskMode.PSEUDONYM, "maskPseudonym", "maskPseudonymHint"],
+];
 
 export function RedactorPage({ locale }: { locale: Locale }) {
   const [ner] = useState(() => new NerClient());
@@ -32,7 +37,6 @@ export function RedactorPage({ locale }: { locale: Locale }) {
   const [enabled, setEnabled] = useState<Set<EntityType>>(loadEnabledTypes);
   const [ruleEntities, setRuleEntities] = useState<Entity[]>([]);
   const [hybridEntities, setHybridEntities] = useState<Entity[] | null>(null);
-  const [copyState, setCopyState] = useState<"idle" | "ok" | "err">("idle");
   const requestGen = useRef(0);
 
   useEffect(() => {
@@ -85,10 +89,11 @@ export function RedactorPage({ locale }: { locale: Locale }) {
     saveEnabledTypes(next);
   }
 
-  async function onCopy() {
-    const ok = await copyText(masked);
-    setCopyState(ok ? "ok" : "err");
-    window.setTimeout(() => setCopyState("idle"), 1500);
+  async function onPaste() {
+    const value = await pasteText();
+    if (value === null) return false;
+    applyText(value);
+    return true;
   }
 
   return (
@@ -104,9 +109,15 @@ export function RedactorPage({ locale }: { locale: Locale }) {
             </button>
           ))}
         </div>
-        <label className="field" htmlFor="source-text">
-          {t(locale, "inputLabel")}
-        </label>
+        <div className="field-head">
+          <label className="field" htmlFor="source-text">
+            {t(locale, "inputLabel")}
+          </label>
+          <div className="field-actions">
+            <ActionButton locale={locale} kind="paste" testId="paste-input" onAction={onPaste} />
+            <ActionButton locale={locale} kind="copy" testId="copy-input" disabled={!text} text={text} />
+          </div>
+        </div>
         <textarea
           id="source-text"
           value={text}
@@ -119,18 +130,25 @@ export function RedactorPage({ locale }: { locale: Locale }) {
 
       <div className="grid">
         <section className="panel">
-          <h2>{t(locale, "previewLabel")}</h2>
+          <div className="field-head">
+            <h2>{t(locale, "previewLabel")}</h2>
+            <div className="field-actions">
+              <ActionButton locale={locale} kind="paste" testId="paste-preview" onAction={onPaste} />
+              <ActionButton locale={locale} kind="copy" testId="copy-preview" disabled={!text} text={text} />
+            </div>
+          </div>
           <HighlightedText text={text} entities={entities} locale={locale} empty={t(locale, "emptyPreview")} />
           <p className="status" aria-live="polite">
             {t(locale, "count", { n: entities.length })} · {t(locale, layer === "hybrid" ? "layerHybrid" : "layerRules")}
           </p>
         </section>
         <section className="panel">
-          <div className="row" style={{ justifyContent: "space-between" }}>
+          <div className="field-head">
             <h2>{t(locale, "maskedLabel")}</h2>
-            <button type="button" className="btn" onClick={() => void onCopy()} disabled={!masked}>
-              {copyState === "ok" ? t(locale, "copied") : copyState === "err" ? t(locale, "copyFailed") : t(locale, "copy")}
-            </button>
+            <div className="field-actions">
+              <ActionButton locale={locale} kind="paste" testId="paste-masked" onAction={onPaste} />
+              <ActionButton locale={locale} kind="copy" testId="copy-masked" disabled={!masked} text={masked} />
+            </div>
           </div>
           <pre className="masked" data-testid="masked">
             {masked}
@@ -141,18 +159,14 @@ export function RedactorPage({ locale }: { locale: Locale }) {
       <div className="panel" style={{ margin: "1rem 0" }}>
         <h2>{t(locale, "maskMode")}</h2>
         <div className="row" role="group" aria-label={t(locale, "maskMode")}>
-          {(
-            [
-              [MaskMode.PLACEHOLDER, "maskPlaceholder"],
-              [MaskMode.PARTIAL, "maskPartial"],
-              [MaskMode.PSEUDONYM, "maskPseudonym"],
-            ] as const
-          ).map(([mode, key]) => (
+          {MASKS.map(([mode, key, hint]) => (
             <button
               key={mode}
               type="button"
-              className="chip"
+              className="chip tip"
               aria-pressed={maskMode === mode}
+              title={t(locale, hint)}
+              data-tip={t(locale, hint)}
               onClick={() => {
                 setMaskMode(mode);
                 saveMaskMode(mode);
@@ -162,7 +176,9 @@ export function RedactorPage({ locale }: { locale: Locale }) {
             </button>
           ))}
         </div>
-        <h2 style={{ marginTop: "0.9rem" }}>{t(locale, "types")}</h2>
+        <h2 className="tip" style={{ marginTop: "0.9rem" }} title={t(locale, "typesHint")} data-tip={t(locale, "typesHint")}>
+          {t(locale, "types")}
+        </h2>
         <div className="row">
           <button
             type="button"
@@ -221,6 +237,40 @@ function sampleKey(id: SampleId) {
   }
 }
 
+function ActionButton({
+  locale,
+  kind,
+  testId,
+  text,
+  disabled,
+  onAction,
+}: {
+  locale: Locale;
+  kind: "copy" | "paste";
+  testId: string;
+  text?: string;
+  disabled?: boolean;
+  onAction?: () => Promise<boolean>;
+}) {
+  const [state, setState] = useState<"idle" | "ok" | "err">("idle");
+  async function run() {
+    const ok = onAction ? await onAction() : await copyText(text ?? "");
+    setState(ok ? "ok" : "err");
+    window.setTimeout(() => setState("idle"), 1500);
+  }
+  const label =
+    state === "ok"
+      ? t(locale, kind === "copy" ? "copied" : "pasted")
+      : state === "err"
+        ? t(locale, kind === "copy" ? "copyFailed" : "pasteFailed")
+        : t(locale, kind);
+  return (
+    <button type="button" className="btn btn-compact" data-testid={testId} disabled={disabled} onClick={() => void run()}>
+      {label}
+    </button>
+  );
+}
+
 function NerBanner({ locale, ner }: { locale: Locale; ner: NerClient }) {
   if (ner.status === "ready") {
     return (
@@ -247,7 +297,9 @@ function NerBanner({ locale, ner }: { locale: Locale; ner: NerClient }) {
         </p>
         <button
           type="button"
-          className="btn"
+          className="btn tip"
+          title={t(locale, "nerLoadHint")}
+          data-tip={t(locale, "nerLoadHint")}
           onClick={() => {
             saveNerEnabled(true);
             void ner.load().catch(() => undefined);
@@ -263,7 +315,9 @@ function NerBanner({ locale, ner }: { locale: Locale; ner: NerClient }) {
       <p>{t(locale, "nerIdle")}</p>
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-primary tip"
+        title={t(locale, "nerLoadHint")}
+        data-tip={t(locale, "nerLoadHint")}
         onClick={() => {
           saveNerEnabled(true);
           void ner.load().catch(() => undefined);

@@ -9,6 +9,7 @@ export function EntityTable({ entities, locale }: { entities: Entity[]; locale: 
   return (
     <div className="panel">
       <h2>{t(locale, "entities")}</h2>
+      <div className="table-wrap">
       <table>
         <thead>
           <tr>
@@ -36,6 +37,7 @@ export function EntityTable({ entities, locale }: { entities: Entity[]; locale: 
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
